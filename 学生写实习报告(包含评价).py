@@ -1,0 +1,78 @@
+# coding=utf-8
+from selenium import webdriver
+import logging
+import time
+import os
+
+# 日志处理
+log_time = time.strftime('%y-%m-%d', time.localtime(time.time()))
+file_path = os.getcwd().replace('\\', '/')
+log_path = file_path + '/log/' + log_time + '.log'
+if not os.path.exists(file_path + '/log'):
+    os.makedirs(file_path + '/log')
+logging.basicConfig(filename=log_path, filemode="a+", level=logging.DEBUG,
+                    format='%(asctime)s %(levelname)s %(filename)s %(lineno)s %(message)s')
+# 浏览器处理
+path = file_path + '/chromedriver.exe'
+# 隐式等待时间
+waittime = 5
+# 获取当前分钟
+nowtime = time.strftime('%m%d%H%M', time.localtime(time.time()))
+# 数据准备
+nowtime = time.strftime('%m%d%H%M', time.localtime(time.time()))
+advice = "希望学校加强学生的实践能力，多组织一些团体的活动，有助于培养团队合作的意识，这对于一个企业来说，员工的团队合作能力是至关重要的。再就是出行的安全，可以多开展这方面的讲座，加强学生的安全防范意识。还有在学校要适当的训练学生的沟通技巧，有时候，一句话换一种方式表达，会起到截然不同的效果。这些都能够加快学生在公司的成长；提升自己。"
+evaluate_for_teacher = "老师细致。作为一名党员教师，她能够模范带头参与各种政治学习活动，她尊敬尊重待人热爱学生，人际关系和谐融洽，是老师们的好榜样。作为一名政治教师，她为了上好课，看查找实例……乐在其中。由于尊重学生，能够切中学生的兴趣点进行教学，她的课堂上，学生积极主动，气氛活跃。作为一名对外联络员，她一趟一趟地奔波，为毕业生寻找合适的工作，智慧地和用人单位恰谈协商，使得每个学生都能有用武之地，能够扬其所长。作为团支部书记，她积极开展团的工作，加强了校内外的联系，有条不紊地组织了各项有声有色的活动，开拓了学生视野。因此被评为市特教学校先进教师。"
+addclass = "野外求生基础知识"
+# 学生账号密码
+username = '8202@xybsyw.com'
+password = 'qaz147'
+# 开始
+driver = webdriver.Chrome(executable_path=path)
+driver.maximize_window()
+
+try:
+    logging.info('学生写周日志的脚本开始')
+    driver.get("http://test.xybsyw.com/login.xhtml")
+    driver.implicitly_wait(waittime)
+    driver.find_element_by_partial_link_text('我是学生').click()
+    driver.find_element_by_id('username').click()
+    driver.find_element_by_id('username').send_keys(username)
+    driver.find_element_by_id('password').send_keys(password)
+    driver.find_element_by_id('login').click()
+    driver.implicitly_wait(waittime)
+    # 有蒙版，先等加载完全
+    time.sleep(1)
+    driver.find_element_by_link_text('实习报告').click()
+    driver.implicitly_wait(waittime)
+    try:
+        driver.find_element_by_link_text('尾页').click()
+        driver.implicitly_wait(waittime)
+    except:
+        logging.info('实习报告只有一页，没有尾页')
+    driver.find_elements_by_link_text('提交实习报告').pop().click()
+    driver.find_element_by_link_text('去评价').click()
+    driver.switch_to.window(driver.window_handles[1])
+    driver.implicitly_wait(waittime)
+    [i.find_element_by_css_selector('input.textbox-text.validatebox-text.textbox-prompt').send_keys('2') for i in
+     driver.find_elements_by_css_selector('span.textbox.numberbox')]
+    driver.find_element_by_id('workHard').find_elements_by_tag_name('img')[0].click()
+    driver.find_element_by_id('beCompetent').find_elements_by_tag_name('img')[1].click()
+    driver.find_element_by_id('satisfyDegree').find_elements_by_tag_name('img')[2].click()
+    driver.find_element_by_id('practiceSuggest').send_keys(advice)
+    for star in driver.find_elements_by_class_name('dd_info'):
+        star.find_element_by_css_selector('span.star.inline_s').find_elements_by_tag_name('img')[2].click()
+        star.find_element_by_css_selector('textarea.targetText.placeholder').send_keys(evaluate_for_teacher + nowtime)
+    driver.find_element_by_class_name('text_p').find_elements_by_tag_name('label')[0].click()
+    driver.find_element_by_id('problemSolving').find_elements_by_tag_name('img')[2].click()
+    driver.find_element_by_id('webUse').find_elements_by_tag_name('img')[2].click()
+    driver.find_element_by_id('webValue').find_elements_by_tag_name('img')[2].click()
+    driver.find_element_by_css_selector('input.base_input.placeholder.base_btn_h35').send_keys(addclass)
+    driver.find_element_by_id('courseBtn').click()
+    driver.find_element_by_id('submitButton').click()
+    time.sleep(3)
+    driver.find_element_by_link_text('退出').click()
+    logging.info('学生写周日志的脚本正常结束')
+except Exception as e:
+    logging.error('学生写周日志的脚本错误' + ':' + str(e))
+finally:
+    driver.quit()

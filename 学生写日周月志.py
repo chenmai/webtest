@@ -57,12 +57,12 @@ try:
     driver.switch_to.parent_frame()
     driver.find_element_by_id('applyBtn').click()
     driver.close()
-    driver.switch_to_window(driver.window_handles[0])
+    driver.switch_to.window(driver.window_handles[0])
     # 周志
     driver.find_element_by_link_text('周志').click()
     driver.implicitly_wait(waittime)
     driver.find_element_by_link_text('新建').click()
-    driver.switch_to_window(driver.window_handles[1])
+    driver.switch_to.window(driver.window_handles[1])
     driver.implicitly_wait(waittime)
     driver.find_element_by_id('title').send_keys('周志' + nowtime)
     driver.find_element_by_xpath('//*[@id="blogsForm"]/div/div[2]/dl/dd/div[1]/span/input[1]').click()
@@ -76,7 +76,7 @@ try:
     driver.switch_to.parent_frame()
     driver.find_element_by_id('applyBtn').click()
     driver.close()
-    driver.switch_to_window(driver.window_handles[0])
+    driver.switch_to.window(driver.window_handles[0])
     # 月志
     driver.find_element_by_link_text('月志').click()
     driver.implicitly_wait(waittime)

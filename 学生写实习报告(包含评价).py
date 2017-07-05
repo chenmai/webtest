@@ -1,5 +1,5 @@
 # coding=utf-8
-from selenium import webdriver
+from selenium import webdriver, common
 import logging
 import time
 import os
@@ -24,7 +24,7 @@ advice = "希望学校加强学生的实践能力，多组织一些团体的活�
 evaluate_for_teacher = "老师细致。作为一名党员教师，她能够模范带头参与各种政治学习活动，她尊敬尊重待人热爱学生，人际关系和谐融洽，是老师们的好榜样。作为一名政治教师，她为了上好课，看查找实例……乐在其中。由于尊重学生，能够切中学生的兴趣点进行教学，她的课堂上，学生积极主动，气氛活跃。作为一名对外联络员，她一趟一趟地奔波，为毕业生寻找合适的工作，智慧地和用人单位恰谈协商，使得每个学生都能有用武之地，能够扬其所长。作为团支部书记，她积极开展团的工作，加强了校内外的联系，有条不紊地组织了各项有声有色的活动，开拓了学生视野。因此被评为市特教学校先进教师。"
 addclass = "野外求生基础知识"
 # 学生账号密码
-username = '8202@xybsyw.com'
+username = '16175@xybsyw.com'
 password = 'qaz147'
 # 开始
 driver = webdriver.Chrome(executable_path=path)
@@ -47,31 +47,54 @@ try:
     try:
         driver.find_element_by_link_text('尾页').click()
         driver.implicitly_wait(waittime)
+    except Exception as e:
+        logging.info('实习报告只有一页，没有尾页' + str(e))
+    driver.find_elements_by_css_selector('div.report_buttons').pop().find_element_by_css_selector('a.base_btn.base_btn_h30.base_w_200.inline_mid').click()
+
+    try:
+        driver.find_element_by_link_text('去评价').click()
+        driver.switch_to.window(driver.window_handles[1])
+        driver.implicitly_wait(waittime)
+        [i.find_element_by_css_selector('input.textbox-text.validatebox-text.textbox-prompt').send_keys('2') for i in
+         driver.find_elements_by_css_selector('span.textbox.numberbox')]
+        driver.find_element_by_id('workHard').find_elements_by_tag_name('img')[0].click()
+        driver.find_element_by_id('beCompetent').find_elements_by_tag_name('img')[1].click()
+        driver.find_element_by_id('satisfyDegree').find_elements_by_tag_name('img')[2].click()
+        driver.find_element_by_id('practiceSuggest').send_keys(advice)
+        for star in driver.find_elements_by_class_name('dd_info'):
+            star.find_element_by_css_selector('span.star.inline_s').find_elements_by_tag_name('img')[2].click()
+            star.find_element_by_css_selector('textarea.targetText.placeholder').send_keys(
+                evaluate_for_teacher + nowtime)
+        driver.find_element_by_class_name('text_p').find_elements_by_tag_name('label')[0].click()
+        driver.find_element_by_id('problemSolving').find_elements_by_tag_name('img')[2].click()
+        driver.find_element_by_id('webUse').find_elements_by_tag_name('img')[2].click()
+        driver.find_element_by_id('webValue').find_elements_by_tag_name('img')[2].click()
+        driver.find_element_by_css_selector('input.base_input.placeholder.base_btn_h35').send_keys(addclass)
+        driver.find_element_by_id('courseBtn').click()
+        driver.find_element_by_id('submitButton').click()
+        driver.close()
+        driver.switch_to.window(driver.window_handles[0])
+        driver.implicitly_wait(waittime)
+        driver.find_elements_by_link_text('提交实习报告').pop().click()
+        driver.implicitly_wait(waittime)
     except:
-        logging.info('实习报告只有一页，没有尾页')
-    driver.find_elements_by_link_text('提交实习报告').pop().click()
-    driver.find_element_by_link_text('去评价').click()
+        logging.info('该实习报告已经被评价，无需再次评价')
+    driver.find_element_by_link_text('确定').click()
     driver.switch_to.window(driver.window_handles[1])
-    driver.implicitly_wait(waittime)
-    [i.find_element_by_css_selector('input.textbox-text.validatebox-text.textbox-prompt').send_keys('2') for i in
-     driver.find_elements_by_css_selector('span.textbox.numberbox')]
-    driver.find_element_by_id('workHard').find_elements_by_tag_name('img')[0].click()
-    driver.find_element_by_id('beCompetent').find_elements_by_tag_name('img')[1].click()
-    driver.find_element_by_id('satisfyDegree').find_elements_by_tag_name('img')[2].click()
-    driver.find_element_by_id('practiceSuggest').send_keys(advice)
-    for star in driver.find_elements_by_class_name('dd_info'):
-        star.find_element_by_css_selector('span.star.inline_s').find_elements_by_tag_name('img')[2].click()
-        star.find_element_by_css_selector('textarea.targetText.placeholder').send_keys(evaluate_for_teacher + nowtime)
-    driver.find_element_by_class_name('text_p').find_elements_by_tag_name('label')[0].click()
-    driver.find_element_by_id('problemSolving').find_elements_by_tag_name('img')[2].click()
-    driver.find_element_by_id('webUse').find_elements_by_tag_name('img')[2].click()
-    driver.find_element_by_id('webValue').find_elements_by_tag_name('img')[2].click()
-    driver.find_element_by_css_selector('input.base_input.placeholder.base_btn_h35').send_keys(addclass)
-    driver.find_element_by_id('courseBtn').click()
-    driver.find_element_by_id('submitButton').click()
+
+    try:
+        if driver.find_element_by_css_selector('span.error_text').is_displayed():
+            print('显示了错误信息')
+            raise SystemExit
+    except common.exceptions.WebDriverException:
+        logging.info('不需要提交实习报告')
+
     time.sleep(3)
     driver.find_element_by_link_text('退出').click()
     logging.info('学生写周日志的脚本正常结束')
+
+except SystemExit:
+    logging.error('提交实习报告出错，可能模板不存在或者规则问题')
 except Exception as e:
     logging.error('学生写周日志的脚本错误' + ':' + str(e))
 finally:

@@ -6,14 +6,14 @@ import os
 import win32gui
 import win32con
 
-# 日志处理
+
 log_time = time.strftime('%y-%m-%d', time.localtime(time.time()))
 reportname = os.getcwd() + '\\' + '思政理论课暑期社会实践报告（论文）.doc'
 file_path = os.getcwd().replace('\\', '/')
 log_path = file_path + '/log/' + log_time + '.log'
 if not os.path.exists(file_path + '/log'):
     os.makedirs(file_path + '/log')
-logging.basicConfig(filename=log_path, filemode="a+", level=logging.DEBUG,
+logging.basicConfig(filename=log_path, filemode="a+", level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(filename)s %(lineno)s %(message)s')
 # 浏览器处理
 path = file_path + '/chromedriver.exe'
@@ -28,7 +28,7 @@ evaluate_for_teacher = "老师细致。作为一名党员教师，她能够模�
 addclass = "野外求生基础知识"
 
 # 学生账号密码
-username = '16175@xybsyw.com'
+username = '8223@xybsyw.com'
 password = 'qaz147'
 # 开始
 driver = webdriver.Chrome(executable_path=path)
@@ -60,20 +60,30 @@ try:
         driver.find_element_by_link_text('去评价').click()
         driver.switch_to.window(driver.window_handles[1])
         driver.implicitly_wait(waittime)
-        [i.find_element_by_css_selector('input.textbox-text.validatebox-text.textbox-prompt').send_keys('2') for i in
-         driver.find_elements_by_css_selector('span.textbox.numberbox')]
+        [i.send_keys('2') for i in
+         driver.find_elements_by_css_selector('input.textbox-text.validatebox-text.textbox-prompt')[0:2]]
         driver.find_element_by_id('workHard').find_elements_by_tag_name('img')[0].click()
         driver.find_element_by_id('beCompetent').find_elements_by_tag_name('img')[1].click()
         driver.find_element_by_id('satisfyDegree').find_elements_by_tag_name('img')[2].click()
         driver.find_element_by_id('practiceSuggest').send_keys(advice)
         for star in driver.find_elements_by_class_name('dd_info'):
-            star.find_element_by_css_selector('span.star.inline_s').find_elements_by_tag_name('img')[2].click()
-            star.find_element_by_css_selector('textarea.targetText.placeholder').send_keys(
-                evaluate_for_teacher + nowtime)
+            try:
+                star.find_element_by_css_selector('span.star.inline_s').find_elements_by_tag_name('img')[2].click()
+                star.find_element_by_css_selector('textarea.targetText.placeholder').send_keys(
+                    evaluate_for_teacher + nowtime)
+            except:
+                continue
         driver.find_element_by_class_name('text_p').find_elements_by_tag_name('label')[0].click()
         driver.find_element_by_id('problemSolving').find_elements_by_tag_name('img')[2].click()
         driver.find_element_by_id('webUse').find_elements_by_tag_name('img')[2].click()
         driver.find_element_by_id('webValue').find_elements_by_tag_name('img')[2].click()
+        for enterprise in driver.find_elements_by_class_name('dd_info'):
+            try:
+                [i.find_elements_by_tag_name('img')[2].click() for i in
+                 enterprise.find_elements_by_css_selector('span.star')]
+                enterprise.find_elements_by_tag_name('label')[1].click()
+            except:
+                continue
         driver.find_element_by_css_selector('input.base_input.placeholder.base_btn_h35').send_keys(addclass)
         driver.find_element_by_id('courseBtn').click()
         driver.find_element_by_id('submitButton').click()
@@ -82,6 +92,7 @@ try:
         driver.implicitly_wait(waittime)
         reportbutton.click()
         driver.implicitly_wait(waittime)
+        time.sleep(1)
     except:
         logging.info('该实习报告已经被评价，无需再次评价')
     driver.find_element_by_link_text('确定').click()
@@ -110,12 +121,9 @@ try:
     time.sleep(3)
     driver.find_element_by_id('submitFile').click()
     driver.implicitly_wait(waittime)
-    try:
-        time.sleep(3)
-        driver.find_element_by_id('submitFile').click()
-    except common.exceptions.WebDriverException:
-        raise SyntaxError
-    time.sleep(3)
+    if driver.find_element_by_class_name('import_success').is_enabled():
+        logging.info('报告提交成功')
+    time.sleep(1)
     driver.find_element_by_link_text('退出').click()
     logging.info('学生写周日志的脚本正常结束')
 

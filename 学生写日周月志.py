@@ -22,7 +22,7 @@ blog_daily_content = "今天至于我来说，具有特殊的意义；因为今�
 blog_weekly_content = "时间过的很快，一个星期就过去了，在这里，我们一行的同学一起先进行了为期3天的上岗前培训，培训的内容是：1.公司的基本情况，比如发展历史，人员数量，产品的卖点等等，2.公司的基本制度比如：上班时间，下班时间，节假日的放假情况等。3.公司的组成，有多个车间组成的：C1C2C3车间B1B2B3车间A1车间D1车间等。4.公司的业余安排等，每个星期的一三五晚上有最新的电影免费在二楼的食堂播放等。最后一天的下午和单位签署了劳动合同。工作的地点也去看过了，迷迷糊糊之间，一个星期过去了。很多东西在培训时说过，但有一点记住了，这个公司是10年前亚洲最大的此类专业的公司。公司的每一个车间，都和其他地方的小加工厂有的一比，这或许是骄傲的一个卖点吧。"
 blog_monthly_content = "在整个实习生涯中，我本着对学生负责的态度尽心尽力做好每一件事情。自己在实践活动中得到了极大的提升，学到了许多书本上根本学不到的东西，受益匪浅，为以后做一名光荣的人民教师积累了宝贵的教学经验。但是，在教学过程中，时间把握不当，不能在有限的45分钟内完成教学目标任务，教学过程和教学环节常常出现疏漏的地方，给学生造成一定的理解困难。所以，我想，作为一名师范生，要真正走向了工作岗位，还需要自己以后两个月的实习不断地努力实践，追求进步。实习尽管辛苦忙碌，但却是对我人生的一大有益的尝试和磨练。最后，我要特别感谢辛勤指导我的武老师，是他让我学到了很多的教学知识，使我从稚嫩的教学走向了成熟的教学。同时，我也要向指导和勉励我的孙老师以及六中的老师们表示衷心的感谢和崇高的敬意!"
 # 学生账号密码
-username = '16175@xybsyw.com'
+username = '8227@xybsyw.com'
 password = 'qaz147'
 # 开始
 driver = webdriver.Chrome(executable_path=path)
@@ -56,6 +56,7 @@ try:
     driver.find_element_by_class_name('ke-content').send_keys(blog_daily_content + nowtime)
     driver.switch_to.parent_frame()
     driver.find_element_by_id('applyBtn').click()
+    time.sleep(1)
     driver.close()
     driver.switch_to.window(driver.window_handles[0])
     # 周志
@@ -75,13 +76,14 @@ try:
     driver.find_element_by_class_name('ke-content').send_keys(blog_weekly_content + nowtime)
     driver.switch_to.parent_frame()
     driver.find_element_by_id('applyBtn').click()
+    time.sleep(2)
     driver.close()
     driver.switch_to.window(driver.window_handles[0])
     # 月志
     driver.find_element_by_link_text('月志').click()
     driver.implicitly_wait(waittime)
     driver.find_element_by_link_text('新建').click()
-    driver.switch_to_window(driver.window_handles[1])
+    driver.switch_to.window(driver.window_handles[1])
     driver.implicitly_wait(waittime)
     driver.find_element_by_id('title').send_keys('月志' + nowtime)
     driver.find_element_by_xpath('//*[@id="blogsForm"]/div/div[2]/dl/dd/div[1]/span/input[1]').click()
@@ -94,6 +96,7 @@ try:
     driver.find_element_by_class_name('ke-content').send_keys(blog_monthly_content + nowtime)
     driver.switch_to.parent_frame()
     driver.find_element_by_id('applyBtn').click()
+    time.sleep(1)
     driver.implicitly_wait(waittime)
     driver.find_element_by_link_text('退出').click()
     logging.info('学生写周日志的脚本正常结束')

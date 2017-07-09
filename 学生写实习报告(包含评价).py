@@ -6,7 +6,6 @@ import os
 import win32gui
 import win32con
 
-
 log_time = time.strftime('%y-%m-%d', time.localtime(time.time()))
 reportname = os.getcwd() + '\\' + '思政理论课暑期社会实践报告（论文）.doc'
 file_path = os.getcwd().replace('\\', '/')
@@ -28,14 +27,14 @@ evaluate_for_teacher = "老师细致。作为一名党员教师，她能够模�
 addclass = "野外求生基础知识"
 
 # 学生账号密码
-username = '8223@xybsyw.com'
+username = '45141@xybsyw.com'
 password = 'qaz147'
 # 开始
 driver = webdriver.Chrome(executable_path=path)
 driver.maximize_window()
 
 try:
-    logging.info('学生写周日志的脚本开始')
+    logging.info('学生实习报告的脚本开始')
     driver.get("http://test.xybsyw.com/login.xhtml")
     driver.implicitly_wait(waittime)
     driver.find_element_by_partial_link_text('我是学生').click()
@@ -92,7 +91,7 @@ try:
         driver.implicitly_wait(waittime)
         reportbutton.click()
         driver.implicitly_wait(waittime)
-        time.sleep(1)
+        time.sleep(2)
     except:
         logging.info('该实习报告已经被评价，无需再次评价')
     driver.find_element_by_link_text('确定').click()
@@ -103,9 +102,9 @@ try:
             print('显示了错误信息')
             raise SyntaxError
     except common.exceptions.WebDriverException:
-        logging.info('不需要提交实习报告')
+        logging.info('正常进入提交页')
     driver.find_element_by_link_text('下载实习报告模板').click()
-    driver.find_element_by_link_text('下一步，上传提交实习报告').click()
+    driver.find_element_by_link_text('下一步，上传提交实习报告').click()  # 这个按钮提示不合理
     driver.implicitly_wait(waittime)
     driver.find_element_by_id('selectFile').click()
     # 处理上传
@@ -123,13 +122,13 @@ try:
     driver.implicitly_wait(waittime)
     if driver.find_element_by_class_name('import_success').is_enabled():
         logging.info('报告提交成功')
-    time.sleep(1)
+    time.sleep(3)
     driver.find_element_by_link_text('退出').click()
-    logging.info('学生写周日志的脚本正常结束')
+    logging.info('学生实习报告的脚本正常结束')
 
 except SyntaxError:
     logging.error('提交实习报告出错，可能模板不存在或者规则问题')
 except Exception as e:
-    logging.error('学生写周日志的脚本错误' + ':' + str(e))
+    logging.error('学生实习报告的脚本错误' + ':' + str(e))
 finally:
     driver.quit()

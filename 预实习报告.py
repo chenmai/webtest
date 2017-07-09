@@ -28,9 +28,9 @@ password = 'qaz147'
 # 开始
 driver = webdriver.Chrome(executable_path=path)
 driver.maximize_window()
+logging.info('学生预实习报告的脚本开始')
 
 try:
-    logging.info('学生预实习报告的脚本开始')
     driver.get("http://test.xybsyw.com/login.xhtml")
     driver.implicitly_wait(waittime)
     driver.find_element_by_partial_link_text('我是学生').click()

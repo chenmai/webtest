@@ -1,3 +1,4 @@
+# coding=utf-8
 from selenium import webdriver
 import logging
 import time
@@ -93,7 +94,7 @@ try:
         logging.info('不需要评语')
     driver.find_element_by_id('reviewSuccessBtn').click()
     ActionChains(driver).move_to_element(driver.find_element_by_id('emailE')).perform()
-    driver.find_element_by_link_text('退出').click())
+    driver.find_element_by_link_text('退出').click()
     logging.info('教师批阅日志正常结束')
 except:
     logging.error('教师批阅日志出错')

@@ -72,3 +72,4 @@ driver.find_element_by_link_text('确认').click()
 driver.set_script_timeout(3)
 driver.quit()
 logging.info('新增专业正常结束')
+

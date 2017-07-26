@@ -30,25 +30,26 @@ username = '16174@xybsyw.com'
 password = 'qaz147'
 # 开始
 driver = webdriver.Chrome(executable_path=path)
+#设置等待时间
+driver.set_script_timeout(waittime)
+driver.set_page_load_timeout(10)
+driver.implicitly_wait(waittime)
+#窗口最大化
 driver.maximize_window()
 
 try:
     logging.info('学生实习报告的脚本开始')
     driver.get("http://test.xybsyw.com/login.xhtml")
-    driver.implicitly_wait(waittime)
     driver.find_element_by_partial_link_text('我是学生').click()
     driver.find_element_by_id('username').click()
     driver.find_element_by_id('username').send_keys(username)
     driver.find_element_by_id('password').send_keys(password)
     driver.find_element_by_id('login').click()
-    driver.implicitly_wait(waittime)
     # 有蒙版，先等加载完全
     time.sleep(1)
     driver.find_element_by_link_text('实习报告').click()
-    driver.implicitly_wait(waittime)
     try:
         driver.find_element_by_link_text('尾页').click()
-        driver.implicitly_wait(waittime)
         time.sleep(1)
     except Exception as e:
         logging.info('实习报告只有一页，没有尾页' + str(e))
@@ -57,7 +58,6 @@ try:
     try:
         driver.find_element_by_link_text('去评价').click()
         driver.switch_to.window(driver.window_handles[1])
-        driver.implicitly_wait(waittime)
         [i.send_keys('2') for i in
          driver.find_elements_by_css_selector('input.textbox-text.validatebox-text.textbox-prompt')[0:2]]
         driver.find_element_by_id('workHard').find_elements_by_tag_name('img')[0].click()
@@ -87,9 +87,7 @@ try:
         driver.find_element_by_id('submitButton').click()
         driver.close()
         driver.switch_to.window(driver.window_handles[0])
-        driver.implicitly_wait(waittime)
         reportbutton.click()
-        driver.implicitly_wait(waittime)
         time.sleep(2)
     except:
         logging.info('该实习报告已经被评价，无需再次评价')
@@ -104,7 +102,6 @@ try:
         logging.info('正常进入提交页')
     driver.find_element_by_link_text('下载实习报告模板').click()
     driver.find_element_by_link_text('下一步，上传提交实习报告').click()  # 这个按钮提示不合理
-    driver.implicitly_wait(waittime)
     driver.find_element_by_id('selectFile').click()
     # 处理上传
     time.sleep(3)
@@ -118,7 +115,6 @@ try:
     # 上传文件等待
     time.sleep(3)
     driver.find_element_by_id('submitFile').click()
-    driver.implicitly_wait(waittime)
     if driver.find_element_by_class_name('import_success').is_enabled():
         logging.info('报告提交成功')
     time.sleep(3)

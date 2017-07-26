@@ -28,25 +28,26 @@ username = '16175@xybsyw.com'
 password = 'qaz147'
 # 开始
 driver = webdriver.Chrome(executable_path=path)
+#设置等待时间
+driver.set_script_timeout(waittime)
+driver.set_page_load_timeout(10)
+driver.implicitly_wait(waittime)
+#窗口最大化
 driver.maximize_window()
 logging.info('学生预实习报告的脚本开始')
 
 try:
     driver.get("http://test.xybsyw.com/login.xhtml")
-    driver.implicitly_wait(waittime)
     driver.find_element_by_partial_link_text('我是学生').click()
     driver.find_element_by_id('username').click()
     driver.find_element_by_id('username').send_keys(username)
     driver.find_element_by_id('password').send_keys(password)
     driver.find_element_by_id('login').click()
-    driver.implicitly_wait(waittime)
     # 有蒙版，先等加载完全
     time.sleep(1)
     driver.find_element_by_link_text('预实习报告').click()
-    driver.implicitly_wait(waittime)
     try:
         driver.find_element_by_link_text('尾页').click()
-        driver.implicitly_wait(waittime)
         time.sleep(1)
     except Exception as e:
         logging.info('预实习报告只有一页，没有尾页' + str(e))
@@ -61,7 +62,6 @@ try:
         logging.info('正常进入提交页')
     driver.find_element_by_link_text('下载预实习报告模板').click()
     driver.find_element_by_link_text('下一步，上传预实习报告').click()
-    driver.implicitly_wait(waittime)
     driver.find_element_by_id('selectFile').click()
     # 处理上传
     time.sleep(3)
@@ -75,7 +75,6 @@ try:
     # 上传文件等待
     time.sleep(3)
     driver.find_element_by_id('submitFile').click()
-    driver.implicitly_wait(waittime)
     if driver.find_element_by_class_name('import_success').is_enabled():
         logging.info('预实习报告提交成功')
     time.sleep(3)

@@ -26,26 +26,27 @@ username = '8227@xybsyw.com'
 password = 'qaz147'
 # 开始
 driver = webdriver.Chrome(executable_path=path)
+#设置等待时间
+driver.set_script_timeout(waittime)
+driver.set_page_load_timeout(10)
+driver.implicitly_wait(waittime)
+#窗口最大化
 driver.maximize_window()
 logging.info('学生写周日志的脚本开始')
 
 try:
     driver.get("http://test.xybsyw.com/login.xhtml")
-    driver.implicitly_wait(waittime)
     driver.find_element_by_partial_link_text('我是学生').click()
     driver.find_element_by_id('username').click()
     driver.find_element_by_id('username').send_keys(username)
     driver.find_element_by_id('password').send_keys(password)
     driver.find_element_by_id('login').click()
-    driver.implicitly_wait(waittime)
     # 有蒙版，先等加载完全
     # 日志
     time.sleep(1)
     driver.find_element_by_link_text('日志').click()
-    driver.implicitly_wait(waittime)
     driver.find_element_by_link_text('新建').click()
     driver.switch_to.window(driver.window_handles[1])
-    driver.implicitly_wait(waittime)
     driver.find_element_by_id('title').send_keys('日志' + nowtime)
     driver.find_element_by_xpath('//*[@id="blogsForm"]/div/div[2]/dl/dd/div[1]/span/input[1]').click()
     driver.find_elements_by_class_name('combobox-item').pop().click()
@@ -62,10 +63,8 @@ try:
     driver.switch_to.window(driver.window_handles[0])
     # 周志
     driver.find_element_by_link_text('周志').click()
-    driver.implicitly_wait(waittime)
     driver.find_element_by_link_text('新建').click()
     driver.switch_to.window(driver.window_handles[1])
-    driver.implicitly_wait(waittime)
     driver.find_element_by_id('title').send_keys('周志' + nowtime)
     driver.find_element_by_xpath('//*[@id="blogsForm"]/div/div[2]/dl/dd/div[1]/span/input[1]').click()
     driver.find_elements_by_class_name('combobox-item').pop().click()
@@ -82,10 +81,8 @@ try:
     driver.switch_to.window(driver.window_handles[0])
     # 月志
     driver.find_element_by_link_text('月志').click()
-    driver.implicitly_wait(waittime)
     driver.find_element_by_link_text('新建').click()
     driver.switch_to.window(driver.window_handles[1])
-    driver.implicitly_wait(waittime)
     driver.find_element_by_id('title').send_keys('月志' + nowtime)
     driver.find_element_by_xpath('//*[@id="blogsForm"]/div/div[2]/dl/dd/div[1]/span/input[1]').click()
     driver.find_elements_by_class_name('combobox-item').pop().click()
@@ -98,7 +95,6 @@ try:
     driver.switch_to.parent_frame()
     driver.find_element_by_id('applyBtn').click()
     time.sleep(1)
-    driver.implicitly_wait(waittime)
     driver.find_element_by_link_text('退出').click()
     logging.info('学生写周日志的脚本正常结束')
 except Exception as e:

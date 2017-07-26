@@ -30,6 +30,11 @@ password = 'wsx258'
 domain = 'http://test2.xybsyw.com/'
 # 开始
 driver = webdriver.Chrome(executable_path=path)
+#设置等待时间
+driver.set_script_timeout(waittime)
+driver.set_page_load_timeout(10)
+driver.implicitly_wait(waittime)
+#窗口最大化
 driver.maximize_window()
 
 # majorname = '通信工程'
@@ -39,23 +44,15 @@ majorcode = '专业代码' + nowtime
 logging.info('新增专业 开始')
 
 driver.get(domain + 'login.xhtml')
-driver.set_script_timeout(3)
-driver.implicitly_wait(waittime)
 driver.find_element_by_link_text('我是老师').click()
 driver.find_element_by_id('schoolSelect').click()
 driver.find_element_by_id('schoolSelectsearch').send_keys(schoolname)
 driver.find_element_by_id('schoolSelectsearchB').click()
-driver.implicitly_wait(waittime)
-time.sleep(1)
 driver.find_element_by_class_name('school-item').click()
 driver.find_element_by_id('username').send_keys(username)
 driver.find_element_by_id('password').send_keys(password)
 driver.find_element_by_id('login').click()
-driver.implicitly_wait(waittime)
-time.sleep(2)
 driver.get(domain + 'center/school/organization/specialtyManage.xhtml')
-driver.implicitly_wait(waittime)
-time.sleep(1)
 driver.find_element_by_id('addSpecialty').click()
 time.sleep(1)
 driver.find_elements_by_css_selector('input.textbox-text.textbox-text-readonly.validatebox-text.textbox-prompt')[
@@ -70,7 +67,6 @@ time.sleep(5)
 driver.find_element_by_id('specialtysTable').find_elements_by_tag_name('tr')[0].find_element_by_class_name(
     'text3').find_element_by_link_text('删除').click()
 driver.find_element_by_link_text('确认').click()
-driver.set_script_timeout(3)
 driver.quit()
 logging.info('新增专业正常结束')
 

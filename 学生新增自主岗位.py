@@ -13,7 +13,7 @@ logging.basicConfig(filename=log_path, filemode="a+", level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(filename)s %(lineno)s %(message)s')
 # 浏览器处理
 path = file_path + '/chromedriver.exe'
-# 隐式等待时间
+# 等待时间
 waittime = 5
 # 获取当前分钟
 nowtime = time.strftime('%m%d%H%M', time.localtime(time.time()))
@@ -35,29 +35,32 @@ responsibilities = '1、负责产品的市场渠道开拓与销售工作，执�
                    '7、收集一线营销信息和用户意见，对公司营销策略、售后服务、等提出参考意见。'
 address = '北京市东城区东华门街道天安门'
 # 学生账号密码
-username = '16174@xybsyw.com'
+username = '9057@xybsyw.com'
 password = 'qaz147'
+# 地址
+domain = 'http://test2.xybsyw.com/'
 # 开始
 driver = webdriver.Chrome(executable_path=path)
+#设置等待时间
+driver.set_script_timeout(waittime)
+driver.set_page_load_timeout(10)
+driver.implicitly_wait(waittime)
+#窗口最大化
 driver.maximize_window()
 
 logging.info('新增自主岗位的脚本开始')
 try:
-    driver.get("http://test.xybsyw.com/login.xhtml")
-    driver.implicitly_wait(waittime)
+    driver.get(domain+'login.xhtml')
     driver.find_element_by_partial_link_text('我是学生').click()
     driver.find_element_by_id('username').click()
     driver.find_element_by_id('username').send_keys(username)
     driver.find_element_by_id('password').send_keys(password)
     driver.find_element_by_id('login').click()
-    driver.implicitly_wait(waittime)
     time.sleep(1)
     driver.find_element_by_link_text('自主岗位库').click()
-    driver.implicitly_wait(waittime)
     time.sleep(1)
     driver.find_element_by_css_selector('span.inline_mid.text1').click()
     driver.switch_to.window(driver.window_handles[1])
-    driver.implicitly_wait(waittime)
     driver.find_element_by_id('enterpriseName').send_keys(enterpriseName)
     driver.find_element_by_id('name').send_keys(name)
     driver.find_element_by_id('linkman').send_keys(linkman)
@@ -96,7 +99,6 @@ try:
     driver.find_element_by_id('submitPostBtn').click()
     # 让提交超过
     time.sleep(2)
-    driver.implicitly_wait(waittime)
     driver.find_element_by_link_text('退出').click()
     logging.info('新增自主岗位的脚本结束')
 except:

@@ -31,13 +31,14 @@ domain = 'http://test2.xybsyw.com/'
 driver = webdriver.Chrome(executable_path=path)
 driver.maximize_window()
 
-majorname = '通信工程'
-# majorname = '专业名称' + nowtime
+# majorname = '通信工程'
+majorname = '专业名称' + nowtime
 majorcode = '专业代码' + nowtime
 
 logging.info('新增专业 开始')
 
 driver.get(domain + 'login.xhtml')
+driver.set_script_timeout(3)
 driver.implicitly_wait(waittime)
 driver.find_element_by_link_text('我是老师').click()
 driver.find_element_by_id('schoolSelect').click()
@@ -53,6 +54,7 @@ driver.implicitly_wait(waittime)
 time.sleep(2)
 driver.get(domain + 'center/school/organization/specialtyManage.xhtml')
 driver.implicitly_wait(waittime)
+time.sleep(1)
 driver.find_element_by_id('addSpecialty').click()
 time.sleep(1)
 driver.find_elements_by_css_selector('input.textbox-text.textbox-text-readonly.validatebox-text.textbox-prompt')[
@@ -67,5 +69,6 @@ time.sleep(5)
 driver.find_element_by_id('specialtysTable').find_elements_by_tag_name('tr')[0].find_element_by_class_name(
     'text3').find_element_by_link_text('删除').click()
 driver.find_element_by_link_text('确认').click()
+driver.set_script_timeout(3)
 driver.quit()
-logging.INFO('新增专业正常结束')
+logging.info('新增专业正常结束')

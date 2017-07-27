@@ -30,7 +30,7 @@ evaluate_for_teacher = "老师细致。作为一名党员教师，她能够模�
 addclass = "野外求生基础知识"
 appraisal = '大学四年的美好时光已接近尾声，同时也是我人生的一大转折点。我通过系统化、理论化的学习;学到了很多专业知识，更重要的是，我学会了如何以较快速度掌握一种新事物的能力，思想成熟了很多，性格更坚毅了。我以严谨的态度和积极的热情投身于学习和工作中，然而日益激烈的社会竟争也使我充分地认识到成为一名德智体全面发展的优秀大学生的重要性。无论如何，过去的是我不断奋斗、不断完善自我的一个过程。 大学生活与社会生活是相互映射的，所以大学阶段的提高是个人综合素质与能力的培养、提高;才是我们作为当代大学生的主题。除此之外，课余时间我经常利用网络带来的便利，关注最新科学技术动态;尤其是有关本专业的知识。使自己始终紧跟世界最新发展潮流和时代的步伐。人无完人，我也有很多缺点需要我不断的去克服，改正。在未来的生活中我会不断的学习充实自己，改正缺点错误，充分利用大学学到的知识继续努力实现自己的梦想，人生价值。'
 # 学生账号密码
-username = '9057@xybsyw.com'
+username = '9040@xybsyw.com'
 password = 'qaz147'
 # 地址
 domain = 'http://test2.xybsyw.com/'
@@ -114,6 +114,7 @@ try:
             win32gui.SendMessage(dialog, win32con.WM_COMMAND, 1, button)
         except:
             logging.info('不需要自我鉴定')
+        time.sleep(1)
         driver.find_element_by_id('submitButton').click()
         driver.close()
         driver.switch_to.window(driver.window_handles[0])

@@ -40,33 +40,38 @@ driver.maximize_window()
 # majorname = '通信工程'
 majorname = '专业名称' + nowtime
 majorcode = '专业代码' + nowtime
+try:
+    logging.info('新增专业 开始')
 
-logging.info('新增专业 开始')
-
-driver.get(domain + 'login.xhtml')
-driver.find_element_by_link_text('我是老师').click()
-driver.find_element_by_id('schoolSelect').click()
-driver.find_element_by_id('schoolSelectsearch').send_keys(schoolname)
-driver.find_element_by_id('schoolSelectsearchB').click()
-driver.find_element_by_class_name('school-item').click()
-driver.find_element_by_id('username').send_keys(username)
-driver.find_element_by_id('password').send_keys(password)
-driver.find_element_by_id('login').click()
-driver.get(domain + 'center/school/organization/specialtyManage.xhtml')
-driver.find_element_by_id('addSpecialty').click()
-time.sleep(1)
-driver.find_elements_by_css_selector('input.textbox-text.textbox-text-readonly.validatebox-text.textbox-prompt')[
+    driver.get(domain + 'login.xhtml')
+    driver.find_element_by_link_text('我是老师').click()
+    time.sleep(1)
+    driver.find_element_by_id('schoolSelect').click()
+    driver.find_element_by_id('schoolSelectsearch').send_keys(schoolname)
+    driver.find_element_by_id('schoolSelectsearchB').click()
+    ime.sleep(1)
+    driver.find_element_by_class_name('school-item').click()
+    driver.find_element_by_id('username').send_keys(username)
+    driver.find_element_by_id('password').send_keys(password)
+    driver.find_element_by_id('login').click()
+    driver.get(domain + 'center/school/organization/specialtyManage.xhtml')
+    driver.find_element_by_id('addSpecialty').click()
+    time.sleep(1)
+    driver.find_elements_by_css_selector('input.textbox-text.textbox-text-readonly.validatebox-text.textbox-prompt')[
     0].click()
-driver.find_element_by_id('_easyui_combobox_i1_0').click()
-driver.find_element_by_css_selector('input.textbox-text.textbox-text-readonly.validatebox-text.textbox-prompt').click()
-driver.find_element_by_id('_easyui_combobox_i2_0').click()
-driver.find_element_by_id('specialtyName').send_keys(majorname)
-driver.find_element_by_id('specialtyCode').send_keys(majorcode)
-driver.find_element_by_id('saveSpecialtyBtn').click()
-time.sleep(5)
-driver.find_element_by_id('specialtysTable').find_elements_by_tag_name('tr')[0].find_element_by_class_name(
+    driver.find_element_by_id('_easyui_combobox_i1_0').click()
+    driver.find_element_by_css_selector(
+        'input.textbox-text.textbox-text-readonly.validatebox-text.textbox-prompt').click()
+    driver.find_element_by_id('_easyui_combobox_i2_0').click()
+    driver.find_element_by_id('specialtyName').send_keys(majorname)
+    driver.find_element_by_id('specialtyCode').send_keys(majorcode)
+    driver.find_element_by_id('saveSpecialtyBtn').click()
+    time.sleep(5)
+    driver.find_element_by_id('specialtysTable').find_elements_by_tag_name('tr')[0].find_element_by_class_name(
     'text3').find_element_by_link_text('删除').click()
-driver.find_element_by_link_text('确认').click()
-driver.quit()
-logging.info('新增专业正常结束')
-
+    driver.find_element_by_link_text('确认').click()
+    logging.info('新增专业 结束')
+except:
+    logging.error('新增专业出错')
+finally:
+    driver.quit()

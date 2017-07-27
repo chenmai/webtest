@@ -97,7 +97,7 @@ try:
     driver.execute_script(
         'document.getElementById("longitude").value="116.39748";document.getElementById("latitude").value="39.90868";')
     driver.find_element_by_id('submitPostBtn').click()
-    # 让提交超过
+    # 让提交成功
     time.sleep(2)
     driver.find_element_by_link_text('退出').click()
     logging.info('新增自主岗位的脚本结束')
